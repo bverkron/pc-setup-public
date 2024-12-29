@@ -5,12 +5,12 @@ param (
 )
 
 if (-not $Mac) {
-    Write-Error "Error: Missing MAC address. Please provide a valid MAC address as a parameter."
+    Write-Error "Error: Missing MAC address. Please provide a valid MAC address as a parameter." -ForegroundColor Red
     exit 1
 }
 
 if (-not $Hostname) {
-    Write-Error "Error: Missing Hostname/IP address. Please provide the Hostname/IP address of the remote machine."
+    Write-Error "Error: Missing Hostname/IP address. Please provide the Hostname/IP address of the remote machine." -ForegroundColor Red
     exit 1
 }
 
@@ -30,10 +30,10 @@ try {
     $UdpClient.Send($MagicPacket, $MagicPacket.Length)
     $UdpClient.Close()
 
-    Write-Output "Magic Packet sent successfully to $Mac."
+    Write-Output "Magic Packet sent successfully to $Mac." -ForegroundColor Blue
 
     # Wait for the remote machine to respond
-    Write-Output "Waiting for the remote machine ($Hostname) to respond..."
+    Write-Output "Waiting for the remote machine ($Hostname) to respond..." -ForegroundColor Blue
     $StartTime = Get-Date
     $Timeout = $StartTime.AddSeconds($TimeoutSeconds)
     $MachineResponded = $false
@@ -41,16 +41,16 @@ try {
     while (-not $MachineResponded -and (Get-Date) -lt $Timeout) {
         if (Test-Connection -ComputerName $Hostname -Count 1 -Quiet) {
             $MachineResponded = $true
-            Write-Output "The remote machine ($Hostname) is now responding."
+            Write-Output "The remote machine ($Hostname) is now responding." -ForegroundColor Green
         } else {
             Start-Sleep -Seconds 5
         }
     }
 
     if (-not $MachineResponded) {
-        Write-Error "Error: The remote machine ($Hostname) did not respond within the timeout period of $TimeoutSeconds seconds."
+        Write-Error "Error: The remote machine ($Hostname) did not respond within the timeout period of $TimeoutSeconds seconds." -ForegroundColor Red
         exit 2
     }
 } catch {
-    Write-Error "Error: $_"
+    Write-Error "Error: $_" -ForegroundColor Red
 }
