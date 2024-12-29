@@ -22,7 +22,6 @@ if (Test-Path $DestinationScript) {
     
     Write-Host "Permissions set" -ForegroundColor Green
 
-
 } else {
     Write-Error "Failed to download the script. Please check the URL or your internet connection." -ForegroundColor Red
 }
